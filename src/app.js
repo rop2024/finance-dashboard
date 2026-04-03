@@ -19,10 +19,16 @@ app.use(loggerMiddleware);
 const authRoutes = require("./routes/auth.routes");
 const transactionRoutes = require("./routes/transaction.routes");
 const budgetRoutes = require("./routes/budget.routes");
+const userRoutes = require("./routes/user.routes");
+const dashboardRoutes = require("./routes/dashboard.routes");
+const databaseRoutes = require("./routes/database.routes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/budgets", budgetRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/database", databaseRoutes);
 
 // Health check
 app.get("/health", (req, res) => {

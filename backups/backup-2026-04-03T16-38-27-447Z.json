@@ -1,0 +1,131 @@
+{
+  "metadata": {
+    "timestamp": "2026-04-03T16:38:29.002Z",
+    "version": "1.0",
+    "type": "full_backup"
+  },
+  "data": {
+    "users": [
+      {
+        "id": "fa83f87d-1a98-45cf-97d4-c0213e5bf509",
+        "email": "demo@example.com",
+        "name": "Demo User",
+        "role": "user",
+        "createdAt": "2026-04-03T15:38:27.909Z",
+        "updatedAt": "2026-04-03T15:38:27.909Z"
+      },
+      {
+        "id": "c3cd9b71-1ca1-4e9d-804d-0d4df2a39abd",
+        "email": "john@example.com",
+        "name": "John Doe",
+        "role": "user",
+        "createdAt": "2026-04-03T16:04:35.020Z",
+        "updatedAt": "2026-04-03T16:04:35.020Z"
+      },
+      {
+        "id": "23f2ff6b-1fe5-42f4-9a0c-2f4ab88fcd0a",
+        "email": "admin@example.com",
+        "name": "Admin User",
+        "role": "admin",
+        "createdAt": "2026-04-03T16:31:28.971Z",
+        "updatedAt": "2026-04-03T16:31:28.971Z"
+      }
+    ],
+    "transactions": [
+      {
+        "id": "2c03ba8f-0ea2-480f-bd8f-1a47e406df81",
+        "amount": 500,
+        "type": "expense",
+        "category": "Food",
+        "description": null,
+        "userId": "c3cd9b71-1ca1-4e9d-804d-0d4df2a39abd",
+        "date": "2026-04-03T00:00:00.000Z",
+        "createdAt": "2026-04-03T16:09:16.487Z",
+        "updatedAt": "2026-04-03T16:09:16.487Z"
+      }
+    ],
+    "budgets": [],
+    "categories": [
+      {
+        "id": "dbbf970b-49c1-4c66-80dc-c368589ba0c7",
+        "name": "Salary",
+        "type": "income",
+        "icon": "💰",
+        "color": "#4CAF50",
+        "createdAt": "2026-04-03T15:38:22.789Z"
+      },
+      {
+        "id": "e235b059-a85e-48ac-95f3-66526f0616fc",
+        "name": "Freelance",
+        "type": "income",
+        "icon": "💻",
+        "color": "#2196F3",
+        "createdAt": "2026-04-03T15:38:23.470Z"
+      },
+      {
+        "id": "b8e583d9-3c33-46df-afc2-ccf24a2788a7",
+        "name": "Investment",
+        "type": "income",
+        "icon": "📈",
+        "color": "#FF9800",
+        "createdAt": "2026-04-03T15:38:24.086Z"
+      },
+      {
+        "id": "ff952d45-b025-411a-8b27-1c0846fe13b3",
+        "name": "Food",
+        "type": "expense",
+        "icon": "🍔",
+        "color": "#F44336",
+        "createdAt": "2026-04-03T15:38:24.723Z"
+      },
+      {
+        "id": "393c185b-a5d7-4cfa-bd5b-a096317ec2f5",
+        "name": "Transport",
+        "type": "expense",
+        "icon": "🚗",
+        "color": "#9C27B0",
+        "createdAt": "2026-04-03T15:38:25.143Z"
+      },
+      {
+        "id": "b335782c-f55d-4850-a26c-ee72c2cf1137",
+        "name": "Shopping",
+        "type": "expense",
+        "icon": "🛍️",
+        "color": "#E91E63",
+        "createdAt": "2026-04-03T15:38:25.779Z"
+      },
+      {
+        "id": "c008f827-b4d9-4257-b15e-3f17c25c5db0",
+        "name": "Entertainment",
+        "type": "expense",
+        "icon": "🎬",
+        "color": "#3F51B5",
+        "createdAt": "2026-04-03T15:38:26.199Z"
+      },
+      {
+        "id": "6cf9abe0-7ad6-43c4-b644-9f94db8fc7f1",
+        "name": "Bills",
+        "type": "expense",
+        "icon": "💡",
+        "color": "#FFC107",
+        "createdAt": "2026-04-03T15:38:26.608Z"
+      },
+      {
+        "id": "92b78e6a-a423-44c4-b269-fad95c582861",
+        "name": "Healthcare",
+        "type": "expense",
+        "icon": "🏥",
+        "color": "#00BCD4",
+        "createdAt": "2026-04-03T15:38:27.017Z"
+      },
+      {
+        "id": "5361b186-2179-44ba-90d9-991be5a39121",
+        "name": "Education",
+        "type": "expense",
+        "icon": "📚",
+        "color": "#8BC34A",
+        "createdAt": "2026-04-03T15:38:27.441Z"
+      }
+    ]
+  }
+}

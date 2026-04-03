@@ -9,7 +9,11 @@
     "prisma:migrate": "npx prisma migrate dev",
     "prisma:studio": "npx prisma studio",
     "prisma:seed": "node prisma/seed.js",
-    "prisma:reset": "npx prisma migrate reset --force"
+    "prisma:reset": "npx prisma migrate reset --force",
+    "db:backup": "node scripts/backup.js",
+    "db:restore": "node scripts/restore.js",
+    "db:health": "node scripts/health-check.js",
+    "db:maintenance": "node scripts/maintenance.js"
   },
   "dependencies": {
     "express": "^4.18.2",

@@ -32,7 +32,7 @@ exports.register = async (userData) => {
   
   // Generate token
   const token = jwt.sign(
-    { id: user.id, email: user.email },
+    { id: user.id, email: user.email, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   );
@@ -41,7 +41,8 @@ exports.register = async (userData) => {
     user: {
       id: user.id,
       email: user.email,
-      name: user.name
+      name: user.name,
+      role: user.role
     },
     token
   };
@@ -66,7 +67,7 @@ exports.login = async (email, password) => {
   
   // Generate token
   const token = jwt.sign(
-    { id: user.id, email: user.email },
+    { id: user.id, email: user.email, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   );
@@ -75,7 +76,8 @@ exports.login = async (email, password) => {
     user: {
       id: user.id,
       email: user.email,
-      name: user.name
+      name: user.name,
+      role: user.role
     },
     token
   };

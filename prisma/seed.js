@@ -34,13 +34,27 @@ async function main() {
     create: {
       email: "demo@example.com",
       password: hashedPassword,
-      name: "Demo User"
+      name: "Demo User",
+      role: "user"
+    }
+  });
+  
+  // Create admin user
+  const adminPassword = await bcrypt.hash("admin123", 10);
+  const adminUser = await prisma.user.upsert({
+    where: { email: "admin@example.com" },
+    update: {},
+    create: {
+      email: "admin@example.com",
+      password: adminPassword,
+      name: "Admin User",
+      role: "admin"
     }
   });
   
   console.log("✅ Database seeded successfully!");
-  console.log("📧 Demo user: demo@example.com");
-  console.log("🔑 Demo password: demo123");
+  console.log("👤 Demo user: demo@example.com (password: demo123)");
+  console.log("👑 Admin user: admin@example.com (password: admin123)");
 }
 
 main()

@@ -17,7 +17,9 @@ exports.findUserById = (id) => {
       id: true,
       email: true,
       name: true,
-      createdAt: true
+      role: true,
+      createdAt: true,
+      updatedAt: true
     }
   });
 };
@@ -26,5 +28,27 @@ exports.updateUser = (id, data) => {
   return prisma.user.update({
     where: { id },
     data
+  });
+};
+
+exports.getAllUsers = () => {
+  return prisma.user.findMany({
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true
+    },
+    orderBy: {
+      createdAt: "desc"
+    }
+  });
+};
+
+exports.deleteUser = (id) => {
+  return prisma.user.deleteMany({
+    where: { id }
   });
 };
