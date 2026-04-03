@@ -1,0 +1,784 @@
+{
+  "info": {
+    "name": "Finance Dashboard API",
+    "description": "Complete API collection for Finance Dashboard Backend with RBAC, Analytics, and Database Management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "transaction_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "budget_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"Test User\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Register a new user account. New users are assigned 'user' role by default."
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('jwt_token', response.token);",
+                  "    pm.collectionVariables.set('user_id', response.user.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"demo@example.com\",\n  \"password\": \"demo123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login with user credentials. Use demo@example.com/demo123 for regular user or admin@example.com/admin123 for admin access."
+          }
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('jwt_token', response.token);",
+                  "    pm.collectionVariables.set('user_id', response.user.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login as admin user for full system access."
+          }
+        },
+        {
+          "name": "Get Current User Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Get current authenticated user's profile information including role."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Create Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('transaction_id', response.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 50.00,\n  \"type\": \"expense\",\n  \"category\": \"Food\",\n  \"description\": \"Lunch at restaurant\",\n  \"date\": \"2024-01-15\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/transactions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "transactions"]
+            },
+            "description": "Create a new income or expense transaction. Type must be 'income' or 'expense'."
+          }
+        },
+        {
+          "name": "Get All Transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/transactions?type=expense&category=Food&startDate=2024-01-01&endDate=2024-12-31",
+              "host": ["{{base_url}}"],
+              "path": ["api", "transactions"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "expense",
+                  "description": "Filter by transaction type (income/expense)"
+                },
+                {
+                  "key": "category",
+                  "value": "Food",
+                  "description": "Filter by category"
+                },
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01",
+                  "description": "Filter from date (YYYY-MM-DD)"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31",
+                  "description": "Filter until date (YYYY-MM-DD)"
+                }
+              ]
+            },
+            "description": "Get all user transactions with optional filtering by date, type, and category."
+          }
+        },
+        {
+          "name": "Get Transaction Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/transactions/stats",
+              "host": ["{{base_url}}"],
+              "path": ["api", "transactions", "stats"]
+            },
+            "description": "Get summary statistics for all user transactions including totals and category breakdowns."
+          }
+        },
+        {
+          "name": "Get Single Transaction",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/transactions/{{transaction_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "transactions", "{{transaction_id}}"]
+            },
+            "description": "Get a specific transaction by ID."
+          }
+        },
+        {
+          "name": "Update Transaction",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 75.00,\n  \"description\": \"Updated lunch expense\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/transactions/{{transaction_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "transactions", "{{transaction_id}}"]
+            },
+            "description": "Update an existing transaction. Only provided fields will be updated."
+          }
+        },
+        {
+          "name": "Delete Transaction",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/transactions/{{transaction_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "transactions", "{{transaction_id}}"]
+            },
+            "description": "Delete a transaction by ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Budgets",
+      "item": [
+        {
+          "name": "Create Budget",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('budget_id', response.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category\": \"Food\",\n  \"amount\": 500.00,\n  \"month\": 1,\n  \"year\": 2024\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/budgets",
+              "host": ["{{base_url}}"],
+              "path": ["api", "budgets"]
+            },
+            "description": "Create a new budget for a specific category and time period."
+          }
+        },
+        {
+          "name": "Get All Budgets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/budgets?month=1&year=2024",
+              "host": ["{{base_url}}"],
+              "path": ["api", "budgets"],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "1",
+                  "description": "Filter by month (1-12)"
+                },
+                {
+                  "key": "year",
+                  "value": "2024",
+                  "description": "Filter by year"
+                }
+              ]
+            },
+            "description": "Get all user budgets with optional month/year filtering."
+          }
+        },
+        {
+          "name": "Update Budget",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 600.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/budgets/{{budget_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "budgets", "{{budget_id}}"]
+            },
+            "description": "Update an existing budget amount."
+          }
+        },
+        {
+          "name": "Delete Budget",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/budgets/{{budget_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "budgets", "{{budget_id}}"]
+            },
+            "description": "Delete a budget by ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Management (Admin Only)",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            },
+            "description": "Get list of all users in the system. Requires admin role."
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{user_id}}"]
+            },
+            "description": "Get specific user by ID. Admin can view any user, regular users can only view themselves."
+          }
+        },
+        {
+          "name": "Update User Role",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id}}/role",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{user_id}}", "role"]
+            },
+            "description": "Update a user's role. Requires admin role. Valid roles: 'user', 'admin'."
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{user_id}}"]
+            },
+            "description": "Delete a user account. Requires admin role. Cannot delete your own account."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard Analytics",
+      "item": [
+        {
+          "name": "Get Dashboard Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/dashboard/summary?period=monthly&year=2024&month=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboard", "summary"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "monthly",
+                  "description": "Period type: 'monthly' or 'yearly'"
+                },
+                {
+                  "key": "year",
+                  "value": "2024",
+                  "description": "Year for filtering"
+                },
+                {
+                  "key": "month",
+                  "value": "1",
+                  "description": "Month for filtering (required for monthly period)"
+                }
+              ]
+            },
+            "description": "Get comprehensive financial summary with time-based filtering."
+          }
+        },
+        {
+          "name": "Get Spending Trends",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/dashboard/trends?months=6&category=Food",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboard", "trends"],
+              "query": [
+                {
+                  "key": "months",
+                  "value": "6",
+                  "description": "Number of months to analyze"
+                },
+                {
+                  "key": "category",
+                  "value": "Food",
+                  "description": "Specific category to analyze (optional)"
+                }
+              ]
+            },
+            "description": "Analyze spending patterns and trends over time with month-over-month comparisons."
+          }
+        },
+        {
+          "name": "Get Budget Analysis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/dashboard/budget-analysis?month=1&year=2024",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboard", "budget-analysis"],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "1",
+                  "description": "Month to analyze (1-12)"
+                },
+                {
+                  "key": "year",
+                  "value": "2024",
+                  "description": "Year to analyze"
+                }
+              ]
+            },
+            "description": "Compare budgeted amounts with actual spending for a specific period."
+          }
+        },
+        {
+          "name": "Get Advanced Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/dashboard/metrics?period=monthly&year=2024&month=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboard", "metrics"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "monthly",
+                  "description": "Period type: 'monthly' or 'yearly'"
+                },
+                {
+                  "key": "year",
+                  "value": "2024",
+                  "description": "Year for filtering"
+                },
+                {
+                  "key": "month",
+                  "value": "1",
+                  "description": "Month for filtering"
+                }
+              ]
+            },
+            "description": "Get detailed financial metrics including averages, spending velocity, and transaction distributions."
+          }
+        },
+        {
+          "name": "Get Spending Forecast",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/dashboard/forecast?months=3",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboard", "forecast"],
+              "query": [
+                {
+                  "key": "months",
+                  "value": "3",
+                  "description": "Number of months to forecast"
+                }
+              ]
+            },
+            "description": "Predict future spending based on historical patterns with confidence levels."
+          }
+        },
+        {
+          "name": "Get Category Trends",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/dashboard/category-trends?months=6&category=Food",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboard", "category-trends"],
+              "query": [
+                {
+                  "key": "months",
+                  "value": "6",
+                  "description": "Number of months to analyze"
+                },
+                {
+                  "key": "category",
+                  "value": "Food",
+                  "description": "Specific category to analyze (optional)"
+                }
+              ]
+            },
+            "description": "Analyze how spending in specific categories changes over time."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Database Management (Admin Only)",
+      "item": [
+        {
+          "name": "Database Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/database/health",
+              "host": ["{{base_url}}"],
+              "path": ["api", "database", "health"]
+            },
+            "description": "Check database connection and health status. Public endpoint."
+          }
+        },
+        {
+          "name": "Get Database Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/database/stats",
+              "host": ["{{base_url}}"],
+              "path": ["api", "database", "stats"]
+            },
+            "description": "Get database statistics including user count, transaction count, and database size. Requires admin role."
+          }
+        },
+        {
+          "name": "Get Database Schema",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/database/schema",
+              "host": ["{{base_url}}"],
+              "path": ["api", "database", "schema"]
+            },
+            "description": "Get database schema information including tables and indexes. Requires admin role."
+          }
+        },
+        {
+          "name": "Create Database Backup",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filepath\": \"backups/custom-backup.json\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/database/backup",
+              "host": ["{{base_url}}"],
+              "path": ["api", "database", "backup"]
+            },
+            "description": "Create a full database backup. Optional custom filepath. Requires admin role."
+          }
+        },
+        {
+          "name": "Restore Database",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filepath\": \"backups/backup-2024-01-01T10-00-00-000Z.json\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/database/restore",
+              "host": ["{{base_url}}"],
+              "path": ["api", "database", "restore"]
+            },
+            "description": "Restore database from backup file. WARNING: This replaces all existing data. Requires admin role."
+          }
+        },
+        {
+          "name": "Run Database Maintenance",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/database/maintenance",
+              "host": ["{{base_url}}"],
+              "path": ["api", "database", "maintenance"]
+            },
+            "description": "Run database maintenance operations (ANALYZE, VACUUM). Requires admin role."
+          }
+        },
+        {
+          "name": "Cleanup Old Data",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"daysOld\": 365\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/database/cleanup",
+              "host": ["{{base_url}}"],
+              "path": ["api", "database", "cleanup"]
+            },
+            "description": "Remove data older than specified days. Requires admin role."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health & System",
+      "item": [
+        {
+          "name": "Server Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Check if the server is running and healthy. Public endpoint."
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Set base URL if not set",
+          "if (!pm.environment.get('base_url')) {",
+          "    pm.environment.set('base_url', 'http://localhost:5000');",
+          "}",
+          "",
+          "// Auto-set Authorization header for authenticated requests",
+          "if (pm.collectionVariables.get('jwt_token')) {",
+          "    pm.request.headers.add({",
+          "        key: 'Authorization',",
+          "        value: 'Bearer ' + pm.collectionVariables.get('jwt_token')",
+          "    });",
+          "}"
+        ]
+      }
+    }
+  ]
+}
